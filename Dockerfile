@@ -1,8 +1,12 @@
-FROM alpine:3.5
+FROM node:10-alpine
 
-ENTRYPOINT ["nginx", "-c",  "/nginx.conf"]
+WORKDIR /app
+COPY package*.json ./
+COPY yarn.lock ./
+RUN yarn
 
-RUN apk add --no-cache nginx
-ADD nginx.conf /
+COPY . .
 
-COPY build /app
+ENV NODE_ENV production
+
+CMD [ "yarn", "start" ]
